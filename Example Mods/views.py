@@ -7,7 +7,7 @@ version = "1.0"
 title = "Views"
 description = "Places a block for each view on a youtube video"
 
-youtube = build("youtube", "v3", developerKey=input("Google API Key for 'Youtube Data API v3'": ))
+youtube = build("youtube", "v3", developerKey=input("Google API Key for 'Youtube Data API v3': "))
 ch_request = youtube.channels().list(part="statistics", id="UCqJwk3U9c4AksI-tb7B045g")
 
 def update_views(game):
