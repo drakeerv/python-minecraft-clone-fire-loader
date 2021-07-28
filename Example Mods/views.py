@@ -19,15 +19,16 @@ def update_views(game):
 def start(game):
     game.blocks_placed = 0
     game.views = 0
-    game.place_timeout = 0
+    game.done_views = True
 
     t = threading.Thread(target=update_views, daemon=True, name="Update Views", args=(game,))
     t.start()
 
 def update(game):
-    if game.blocks_placed < game.views and game.place_timeout == 0:
-        game.world.set_block([random.randint(-64, 64), random.randint(0, 128), random.randint(-64, 64)], random.randint(1, len(game.world.block_types) - 1))
+    if game.blocks_placed < game.views:
+        game.world.set_block([random.randint(-64, 63), random.randint(0, 127), random.randint(-64, 63)], random.randint(1, len(game.world.block_types) - 1))
         game.blocks_placed += 1;
-        game.place_timeout = 10
-    elif game.place_timeout > 0:
-        game.place_timeout -=1;
+        game.done_views = False
+    elif not game.done_views:
+        print("Up to date on views")
+        game.done_views = True

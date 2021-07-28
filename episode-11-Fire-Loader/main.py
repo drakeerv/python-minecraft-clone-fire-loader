@@ -21,6 +21,11 @@ import world
 
 import hit
 
+print("--- Welcome to Fire Loader ---")
+print("Developed by drakeerv")
+print("--- Starting---")
+print("")
+
 mods = [f.replace(".py", "") for f in os.listdir("mods") if f.endswith(".py")]
 mods_imported = [__import__("mods."+m, fromlist=[""]) for m in mods]
 
