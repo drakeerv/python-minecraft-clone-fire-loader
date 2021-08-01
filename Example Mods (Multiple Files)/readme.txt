@@ -1,0 +1,1 @@
+I made this extra folder for organization. It will be changed later so that a mod will have its own directory in the mod folder. For now, copy the mod data files out of the dir in this dir to the mod folder.

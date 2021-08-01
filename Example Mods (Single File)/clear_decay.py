@@ -2,7 +2,8 @@ import random
 
 version = "1.0"
 title = "Clear"
-description = "Clear World"
+description = "Clear World."
+author = "drakeerv"
 
 def start(game):
     game.blocks_to_remove = []

@@ -1,0 +1,15 @@
+{
+    "size": {
+        "width": 50,
+        "height": 50
+    },
+    "position": {
+        "x": 0,
+        "y": 0,
+        "z": 100
+    },
+    "filename": "image.jpg",
+    "opacity_threshold": 125,
+    "reverse": false,
+    "rotate": false
+}

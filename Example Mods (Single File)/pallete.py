@@ -1,6 +1,7 @@
 version = "1.0"
 title = "Pallete"
-description = "Creates a pick block pallete at the top of the map"
+description = "Creates a pick block pallete at the top of the map."
+author = "drakeerv"
 
 def start(game):
     for z in range(1, (len(game.world.block_types) - 1)):
