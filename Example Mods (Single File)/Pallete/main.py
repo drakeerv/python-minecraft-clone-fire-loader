@@ -6,6 +6,3 @@ author = "drakeerv"
 def start(game):
     for z in range(1, (len(game.world.block_types) - 1)):
         game.world.set_block([0, 127, z-64], z)
-
-def update(game):
-    pass

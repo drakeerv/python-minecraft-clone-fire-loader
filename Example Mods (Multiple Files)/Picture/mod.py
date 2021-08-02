@@ -2,15 +2,17 @@ from PIL import Image
 
 import json
 import math
+import os
 
 version = "1.0"
 title = "Picture"
 description = "Creates pixel art from a picture."
 author = "drakeerv"
 
-settings = json.load(open("mods/image-settings.json"))
+path = os.path.dirname(os.path.realpath(__file__))
+settings = json.load(open(f"{path}/image-settings.json"))
 
-img = Image.open(f"mods/{settings.get('filename', 'image.png')}").convert("RGBA")
+img = Image.open(f"{path}/{settings.get('filename', 'image.png')}").convert("RGBA")
 img = img.resize((settings.get("size", {}).get("width", img.size[0]), settings.get("size", {}).get("height", img.size[1])))
 
 blocks = []
@@ -58,6 +60,3 @@ def start(game):
             if block != 0:
                 position = settings.get("position", {"x": 0, "y": 0, "z": 0})
                 game.world.set_block([(x if not settings.get("rotate", False) else 0)+position["x"], y+position["y"], (x if settings.get("rotate", False) else 0)+position["z"]], block+1)
-
-def update(game):
-    pass

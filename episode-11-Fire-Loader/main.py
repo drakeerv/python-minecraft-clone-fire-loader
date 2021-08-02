@@ -26,11 +26,11 @@ print("Developed by drakeerv")
 print("--- Starting---")
 print("")
 
-mods = [f.replace(".py", "") for f in os.listdir("mods") if f.endswith(".py")]
-mods_imported = [__import__("mods."+m, fromlist=[""]) for m in mods]
+mods = [os.path.join("mods", f[1], "main.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "main.py" in f[0]]
+mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
 
 for module in mods_imported:
-	print(f"Mod initialized: {module.title} (By: {module.author})")
+	print(f"Mod initialized: {(module.title if hasattr(module, 'title') else 'Undefined')}, Version: {(module.version if hasattr(module, 'version') else 'Undefined')} (By: {(module.author if hasattr(module, 'author') else 'Undefined')})")
 
 print("")
 
@@ -64,8 +64,9 @@ class Window(pyglet.window.Window):
 		# mod start
 
 		for module in mods_imported:
-			try: module.start(self)
-			except Exception as e: print(e)
+			if hasattr(module, "start"):
+				try: module.start(self)
+				except Exception as e: print(e)
 	
 	def update(self, delta_time):
 		# print(f"FPS: {1.0 / delta_time}")
@@ -76,8 +77,9 @@ class Window(pyglet.window.Window):
 		self.camera.update_camera(delta_time)
 
 		for module in mods_imported:
-			try: module.update(self)
-			except Exception as e: print(e)
+			if hasattr(module, "update"):
+				try: module.update(self)
+				except Exception as e: print(e)
 	
 	def on_draw(self):
 		self.camera.update_matrices()
@@ -98,6 +100,11 @@ class Window(pyglet.window.Window):
 		self.world.draw()
 
 		gl.glFinish()
+
+		for module in mods_imported:
+			if hasattr(module, "draw"):
+				try: module.draw(self)
+				except Exception as e: print(e)
 	
 	# input functions
 
@@ -108,10 +115,20 @@ class Window(pyglet.window.Window):
 		self.camera.width = width
 		self.camera.height = height
 
+		for module in mods_imported:
+			if hasattr(module, "resize"):
+				try: module.resize(self)
+				except Exception as e: print(e)
+
 	def on_mouse_press(self, x, y, button, modifiers):
 		if not self.mouse_captured:
 			self.mouse_captured = True
 			self.set_exclusive_mouse(True)
+
+			for module in mods_imported:
+				if hasattr(module, "capture"):
+					try: module.capture(self)
+					except Exception as e: print(e)
 
 			return
 
@@ -127,6 +144,11 @@ class Window(pyglet.window.Window):
 		while hit_ray.distance < hit.HIT_RANGE:
 			if hit_ray.step(hit_callback):
 				break
+
+		for module in mods_imported:
+			if hasattr(module, "mouse_press"):
+				try: module.mouse_press(self)
+				except Exception as e: print(e)
 	
 	def on_mouse_motion(self, x, y, delta_x, delta_y):
 		if self.mouse_captured:
@@ -136,6 +158,11 @@ class Window(pyglet.window.Window):
 			self.camera.rotation[1] += delta_y * sensitivity
 
 			self.camera.rotation[1] = max(-math.tau / 4, min(math.tau / 4, self.camera.rotation[1]))
+
+			for module in mods_imported:
+				if hasattr(module, "mouse_motion"):
+					try: module.mouse_motion(self)
+					except Exception as e: print(e)
 	
 	def on_mouse_drag(self, x, y, delta_x, delta_y, buttons, modifiers):
 		self.on_mouse_motion(x, y, delta_x, delta_y)
@@ -162,6 +189,11 @@ class Window(pyglet.window.Window):
 		elif key == pyglet.window.key.ESCAPE:
 			self.mouse_captured = False
 			self.set_exclusive_mouse(False)
+
+		for module in mods_imported:
+			if hasattr(module, "keyboard_press"):
+				try: module.keyboard_press(self)
+				except Exception as e: print(e)
 	
 	def on_key_release(self, key, modifiers):
 		if not self.mouse_captured:
@@ -175,6 +207,11 @@ class Window(pyglet.window.Window):
 		elif key == pyglet.window.key.SPACE : self.camera.input[1] -= 1
 		elif key == pyglet.window.key.LSHIFT: self.camera.input[1] += 1
 		elif key == pyglet.window.key.LCTRL : self.camera.target_speed = camera.WALKING_SPEED
+
+		for module in mods_imported:
+			if hasattr(module, "keyboard_release"):
+				try: module.keyboard_release(self)
+				except Exception as e: print(e)
 
 class Game:
 	def __init__(self):
