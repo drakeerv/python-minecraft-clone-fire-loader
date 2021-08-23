@@ -1,3 +1,6 @@
+# TODO
+# 1. readthedocs
+# 2. controller
 
 import math
 import ctypes
