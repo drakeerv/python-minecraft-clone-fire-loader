@@ -22,6 +22,9 @@ class Hit_ray:
 
 		# current distance the point has travelled
 		self.distance = 0
+
+		# set variables to read
+		self.hit_range_r = HIT_RANGE
 	
 	# 'check' and 'step' both return 'True' if something is hit, and 'False' if not
 

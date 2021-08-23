@@ -28,6 +28,11 @@ class Camera:
 
 		self.target_speed = WALKING_SPEED
 		self.speed = self.target_speed
+
+		# set variables to read
+
+		self.walking_speed_r = WALKING_SPEED
+		self.sprinting_speed_r = SPRINTING_SPEED
 	
 	def update_camera(self, delta_time):
 		self.speed += (self.target_speed - self.speed) * delta_time * 20

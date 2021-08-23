@@ -59,6 +59,12 @@ class Chunk:
 
 		self.ibo = gl.GLuint(0)
 		gl.glGenBuffers(1, self.ibo)
+
+		# set variables to read
+
+		self.chunk_width_r = CHUNK_WIDTH
+		self.chunk_height_r = CHUNK_HEIGHT
+		self.chunk_length_r = CHUNK_LENGTH
 	
 	def update_subchunk_meshes(self):
 		for subchunk_position in self.subchunks:

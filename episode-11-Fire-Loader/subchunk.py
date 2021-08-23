@@ -27,6 +27,12 @@ class Subchunk:
 
 		self.mesh_index_counter = 0
 		self.mesh_indices = []
+
+		# set variables to read
+		
+		self.subchunk_width_r = SUBCHUNK_WIDTH
+		self.subchunk_height_r = SUBCHUNK_HEIGHT
+		self.subchunk_length_r = SUBCHUNK_LENGTH
 	
 	def update_mesh(self):
 		self.mesh_vertex_positions = []
