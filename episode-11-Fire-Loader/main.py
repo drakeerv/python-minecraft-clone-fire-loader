@@ -29,8 +29,11 @@ print("Developed by drakeerv")
 print("--- Starting---")
 print("")
 
-mods = [os.path.join("mods", f[1], "main.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "main.py" in f[0]]
-mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
+mods_imported = []
+
+if os.path.isdir("mods"):
+	mods = [os.path.join("mods", f[1], "main.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "main.py" in f[0]]
+	mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
 
 for module in mods_imported:
 	print(f"Mod initialized: {(module.title if hasattr(module, 'title') else 'Undefined')}, Version: {(module.version if hasattr(module, 'version') else 'Undefined')} (By: {(module.author if hasattr(module, 'author') else 'Undefined')})")
