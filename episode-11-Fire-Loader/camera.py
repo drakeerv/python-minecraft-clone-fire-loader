@@ -38,7 +38,7 @@ class Camera:
 		self.speed += (self.target_speed - self.speed) * delta_time * 20
 		multiplier = self.speed * delta_time
 
-		self.position[1] += self.input[1] * multiplier
+		self.position[1] += (1 if self.input[1] else 0) * multiplier
 
 		if self.input[0] or self.input[2]:
 			angle = self.rotation[0] - math.atan2(self.input[2], self.input[0]) + math.tau / 4
