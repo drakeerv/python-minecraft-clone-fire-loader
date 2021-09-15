@@ -24,11 +24,11 @@ import world
 
 import hit
 
-print("--- Welcome to Fire Loader ---")
-print("Developed by drakeerv")
-print("--- Starting---")
-print("")
+lines = ["--- Welcome to Fire Loader ---", "Developed by drakeerv", "Modified from obiwac", "--- Starting---", ""]
+[print(line) for line in lines]
+del lines
 
+mods = []
 mods_imported = []
 
 if os.path.isdir("mods"):
