@@ -13,12 +13,8 @@ pyglet.options["debug_gl"] = False
 
 import pyglet.gl as gl
 
-import matrix
 import shader
 import camera
-
-import block_type
-import texture_manager
 
 import world
 

@@ -22,7 +22,7 @@ if os.path.isdir("mods"):
 
 class WorldBaseImpl:
 	def __init__(self):
-		self.texture_manager = texture_manager.Texture_manager(16, 16, 256)
+		self.texture_manager = texture_manager.TextureManager(16, 16, 256)
 		self.block_types = [None]
 
 		# parse block type data file
