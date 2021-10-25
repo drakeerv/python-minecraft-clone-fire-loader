@@ -24,7 +24,7 @@ import world
 
 import hit
 
-lines = ["--- Welcome to Fire Loader ---", "Developed by drakeerv", "Modified from obiwac", "--- Starting---", ""]
+lines = ["--- Welcome to Fire Loader ---", "Developed by drakeerv and Jukitsu", "Modified from obiwac", "--- Starting---", ""]
 [print(line) for line in lines]
 del lines
 
@@ -40,7 +40,7 @@ for module in mods_imported:
 
 print("")
 
-class Window(pyglet.window.Window):
+class WindowBaseImpl(pyglet.window.Window):
 	def __init__(self, **args):
 		super().__init__(**args)
 
@@ -218,6 +218,15 @@ class Window(pyglet.window.Window):
 			if hasattr(module, "keyboard_release"):
 				try: module.keyboard_release(self)
 				except Exception as e: print(e)
+
+WindowMixins = []
+for module in mods_imported:
+	if hasattr(module, "WindowMixin"):
+		WindowMixins.append(module.WindowMixin)
+		print("Applying mixin to class main.Window")
+
+class Window(*WindowMixins, WindowBaseImpl):
+	"""Window class that handles the game window and event callbacks"""
 
 class Game:
 	def __init__(self):

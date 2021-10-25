@@ -11,7 +11,16 @@ import texture_manager
 
 import models
 
-class World:
+import os
+
+mods = []
+mods_imported = []
+
+if os.path.isdir("mods"):
+	mods = [os.path.join("mods", f[1], "world.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "world.py" in f[0]]
+	mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
+
+class WorldBaseImpl:
 	def __init__(self):
 		self.texture_manager = texture_manager.Texture_manager(16, 16, 256)
 		self.block_types = [None]
@@ -160,3 +169,13 @@ class World:
 	def draw(self):
 		for chunk_position in self.chunks:
 			self.chunks[chunk_position].draw()
+
+
+WorldMixins = []
+for module in mods_imported:
+	if hasattr(module, "WorldMixin"):
+		WorldMixins.append(module.WorldMixin)
+		print("Applying mixin to class world.World")
+
+class World(*WorldMixins, WorldBaseImpl):
+	"""World class that handles the actual minecraft world"""

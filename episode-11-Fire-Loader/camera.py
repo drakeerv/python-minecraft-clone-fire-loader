@@ -1,4 +1,5 @@
 import math
+
 import matrix
 
 WALKING_SPEED = 7
@@ -28,17 +29,12 @@ class Camera:
 
 		self.target_speed = WALKING_SPEED
 		self.speed = self.target_speed
-
-		# set variables to read
-
-		self.walking_speed_r = WALKING_SPEED
-		self.sprinting_speed_r = SPRINTING_SPEED
 	
 	def update_camera(self, delta_time):
 		self.speed += (self.target_speed - self.speed) * delta_time * 20
 		multiplier = self.speed * delta_time
 
-		self.position[1] += (1 if self.input[1] else 0) * multiplier
+		self.position[1] += self.input[1] * multiplier
 
 		if self.input[0] or self.input[2]:
 			angle = self.rotation[0] - math.atan2(self.input[2], self.input[0]) + math.tau / 4
