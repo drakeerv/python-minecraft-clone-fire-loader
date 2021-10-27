@@ -227,7 +227,7 @@ class Window(*WindowMixins, WindowBaseImpl):
 class Game:
 	def __init__(self):
 		self.config = gl.Config(major_version = 3, depth_size = 16)
-		self.window = Window(config = self.config, width = 800, height = 600, caption = "Minecraft clone (Fire Loader)", resizable = True, vsync = False)
+		self.window = Window(config = self.config, width = 852, height = 480, caption = "Minecraft clone (Fire Loader)", resizable = True, vsync = False)
 	
 	def run(self):
 		pyglet.app.run()
