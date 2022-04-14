@@ -13,18 +13,14 @@ pyglet.options["debug_gl"] = False
 
 import pyglet.gl as gl
 
-import matrix
 import shader
 import camera
-
-import block_type
-import texture_manager
 
 import world
 
 import hit
 
-lines = ["--- Welcome to Fire Loader ---", "Developed by drakeerv", "Modified from obiwac", "--- Starting---", ""]
+lines = ["--- Welcome to Fire Loader ---", "Developed by drakeerv and Jukitsu", "Modified from obiwac", "--- Starting---", ""]
 [print(line) for line in lines]
 del lines
 
@@ -40,7 +36,7 @@ for module in mods_imported:
 
 print("")
 
-class Window(pyglet.window.Window):
+class WindowBaseImpl(pyglet.window.Window):
 	def __init__(self, **args):
 		super().__init__(**args)
 
@@ -219,10 +215,19 @@ class Window(pyglet.window.Window):
 				try: module.keyboard_release(self)
 				except Exception as e: print(e)
 
+WindowMixins = []
+for module in mods_imported:
+	if hasattr(module, "WindowMixin"):
+		WindowMixins.append(module.WindowMixin)
+		print("Applying mixin to class main.Window")
+
+class Window(*WindowMixins, WindowBaseImpl):
+	"""Window class that handles the game window and event callbacks"""
+
 class Game:
 	def __init__(self):
 		self.config = gl.Config(major_version = 3, depth_size = 16)
-		self.window = Window(config = self.config, width = 800, height = 600, caption = "Minecraft clone (Fire Loader)", resizable = True, vsync = False)
+		self.window = Window(config = self.config, width = 852, height = 480, caption = "Minecraft clone (Fire Loader)", resizable = True, vsync = False)
 	
 	def run(self):
 		pyglet.app.run()

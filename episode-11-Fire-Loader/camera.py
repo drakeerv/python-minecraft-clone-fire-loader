@@ -1,10 +1,19 @@
 import math
+import os
+
 import matrix
 
 WALKING_SPEED = 7
 SPRINTING_SPEED = 21
 
-class Camera:
+mods = []
+mods_imported = []
+
+if os.path.isdir("mods"):
+	mods = [os.path.join("mods", f[1], "camera.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "camera.py" in f[0]]
+	mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
+
+class CameraBaseImpl:
 	def __init__(self, shader, width, height):
 		self.width = width
 		self.height = height
@@ -28,17 +37,12 @@ class Camera:
 
 		self.target_speed = WALKING_SPEED
 		self.speed = self.target_speed
-
-		# set variables to read
-
-		self.walking_speed_r = WALKING_SPEED
-		self.sprinting_speed_r = SPRINTING_SPEED
 	
 	def update_camera(self, delta_time):
 		self.speed += (self.target_speed - self.speed) * delta_time * 20
 		multiplier = self.speed * delta_time
 
-		self.position[1] += (1 if self.input[1] else 0) * multiplier
+		self.position[1] += self.input[1] * multiplier
 
 		if self.input[0] or self.input[2]:
 			angle = self.rotation[0] - math.atan2(self.input[2], self.input[0]) + math.tau / 4
@@ -65,3 +69,12 @@ class Camera:
 
 		mvp_matrix = self.p_matrix * self.mv_matrix
 		self.shader.uniform_matrix(self.shader_matrix_location, mvp_matrix)
+
+CameraMixins = []
+for module in mods_imported:
+	if hasattr(module, "CameraMixin"):
+		CameraMixins.append(module.CameraMixin)
+		print("Applying mixin to class camera.Camera")
+
+class Camera(*CameraMixins, CameraBaseImpl):
+	"""Camera class that handles camera transforms"""

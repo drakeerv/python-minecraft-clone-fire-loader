@@ -4,12 +4,22 @@ import math
 import pyglet.gl as gl
 
 import subchunk 
+import os
 
 CHUNK_WIDTH = 16
 CHUNK_HEIGHT = 128
 CHUNK_LENGTH = 16
 
-class Chunk:
+mods = []
+mods_imported = []
+
+if os.path.isdir("mods"):
+	mods = [os.path.join("mods", f[1], "chunk.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "chunk.py" in f[0]]
+	mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
+
+print(mods)
+
+class ChunkBaseImpl:
 	def __init__(self, world, chunk_position):
 		self.world = world
 		
@@ -187,3 +197,12 @@ class Chunk:
 			self.mesh_indices_length,
 			gl.GL_UNSIGNED_INT,
 			None)
+
+ChunkMixins = []
+for module in mods_imported:
+	if hasattr(module, "ChunkMixin"):
+		ChunkMixins.append(module.ChunkMixin)
+		print("Applying mixin to class chunk.Chunk")
+
+class Chunk(*ChunkMixins, ChunkBaseImpl):
+	"""Chunk class that handles storage of blocks and render region"""

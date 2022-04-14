@@ -1,9 +1,16 @@
-import ctypes
+import os
 import pyglet
 
 import pyglet.gl as gl
 
-class Texture_manager:
+mods = []
+mods_imported = []
+
+if os.path.isdir("mods"):
+	mods = [os.path.join("mods", f[1], "texture_manager.py").replace(".py", "") for f in [[os.listdir(os.path.join("mods", d)), d] for d in os.listdir("mods") if os.path.isdir(os.path.join("mods", d))] if "texture_manager.py" in f[0]]
+	mods_imported = [__import__(m.replace("\\", "."), fromlist=[""]) for m in mods]
+
+class TextureManagerBaseImpl:
 	def __init__(self, texture_width, texture_height, max_textures):
 		self.texture_width = texture_width
 		self.texture_height = texture_height
@@ -40,3 +47,12 @@ class Texture_manager:
 				self.texture_width, self.texture_height, 1,
 				gl.GL_RGBA, gl.GL_UNSIGNED_BYTE,
 				texture_image.get_data("RGBA", texture_image.width * 4))
+
+TextureManagerMixins = []
+for module in mods_imported:
+	if hasattr(module, "TextureManagerMixin"):
+		TextureManagerMixins.append(module.TextureManagerMixin)
+		print("Applying mixin to class texture_manager.TextureManager")
+
+class TextureManager(*TextureManagerMixins, TextureManagerBaseImpl):
+	"""Texture Manager class"""

@@ -3,6 +3,7 @@ import copy
 import ctypes
 import math
 
+
 def copy_matrix(matrix):
 	return copy.deepcopy(matrix) # we need to use deepcopy since we're dealing with 2D arrays
 
@@ -42,14 +43,17 @@ class Matrix:
 	def __imul__(self, matrix):
 		self.data = multiply_matrices(self.data, matrix.data)
 	
-	def scale(self, x, y, z):
+	
+	def scale(self, scale_x, scale_y, scale_z):
 		for i in range(4): self.data[0][i] *= scale_x
 		for i in range(4): self.data[1][i] *= scale_y
 		for i in range(4): self.data[2][i] *= scale_z
 	
+	
 	def translate(self, x, y, z):
 		for i in range(4):
 			self.data[3][i] = self.data[3][i] + (self.data[0][i] * x + self.data[1][i] * y + self.data[2][i] * z)
+	
 	
 	def rotate(self, angle, x, y, z):
 		magnitude = math.sqrt(x * x + y * y + z * z)
@@ -114,6 +118,7 @@ class Matrix:
 		
 		self.data = multiply_matrices(self.data, frustum_matrix)
 	
+	
 	def perspective(self, fovy, aspect, near, far):
 		frustum_y = math.tan(math.radians(fovy) / 2)
 		frustum_x = frustum_y * aspect
@@ -137,3 +142,5 @@ class Matrix:
 		orthographic_matrix[3][2] = -(near + far) / deltaz
 		
 		self.data = multiply_matrices(self.data, orthographic_matrix)
+
+
